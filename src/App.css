@@ -1,5 +1,9 @@
 .App {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
   text-align: center;
+  height: 100vh;
 }
 
 .App-logo {
@@ -7,18 +11,65 @@
   height: 80px;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
-
-.App-intro {
-  font-size: large;
-}
-
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+.zone {
+  border: 1px solid #c3c3c3;
+  min-width: 200px;
+}
+
+.zoneGroup-side {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.zoneGroup-center {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 6;
+}
+
+.topLeft {
+  flex-grow: 1;
+  text-align: left;
+}
+.bottomLeft {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.topCenter {
+  text-align: center;
+  align-self: flex-start;
+  max-height: 200px;
+  width: 100%;
+  flex-grow: 1;
+}
+.center {
+  text-align: center;
+  align-self: center;
+  justify-content: center;
+  width: 100%;
+  flex-grow: 3;
+}
+.bottomCenter {
+  text-align: center;
+  align-self: flex-end;
+  height: 200px;
+  width: 100%;
+  max-height: 200px;
+  flex-grow: 1;
+}
+
+.topRight {
+  flex-grow: 1;
+  text-align: right;
+}
+.bottomRight {
+  flex-grow: 1;
+  text-align: right;
 }

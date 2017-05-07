@@ -91,20 +91,23 @@ export default class YahooWeather extends Component {
           <div className="yw-data">
             <div className="yw-condition">
               <div className="yw-icon">
-                <WeatherIcon type={'rainy'} />
+                <WeatherIcon type={'sunShower'} />
               </div>
-              { data.item.condition.text + ' ' + data.item.condition.temp } { unit }
+              <div className="yw-details">
+                <div className="humidity"><i className="fa fa-umbrella" /> { data.atmosphere.humidity }%</div>
+                <div className="yw-temp">{ data.item.condition.temp + '°'}</div>
+                <div className="yw-text">
+                  { data.item.condition.text }
+                </div>
+              </div>
             </div>
-            <div className="yw-time">
+            <div className="yw-forecast">
+              Today forecast - { data.item.forecast[1].text },
+              low { data.item.forecast[1].low + '°'}, high { data.item.forecast[1].high + '°'}
+            </div>
+            {/* <div className="yw-time">
               { this.getTimeToSunToggle() }
-            </div>
-            <div className="yw-humidity">
-              Humidity: { data.atmosphere.humidity }%
-            </div>
-            <div className="yw-today">
-              <div>Today: { data.item.forecast[1].text }</div>
-              Low: { data.item.forecast[1].low } { unit } | High: { data.item.forecast[1].high } { unit }
-            </div>
+            </div> */}
           </div>
         }
       </div>

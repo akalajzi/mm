@@ -1,0 +1,35 @@
+.cc {
+  padding-right: 8px;
+}
+
+.coin-asset {
+  /*height: 24px;*/
+}
+.coin-asset td {
+  padding-bottom: 10px;
+}
+
+.coin-item td,
+.coin-asset td {
+  padding-right: 20px;
+}
+td.cc-symbol {
+  padding-right: 0px;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.coin-asset {
+  font-size: 12px;
+  color: #b9b9b9;
+}

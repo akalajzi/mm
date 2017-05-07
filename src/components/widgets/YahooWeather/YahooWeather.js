@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import moment from 'moment'
+// import moment from 'moment'
 
 import WeatherIcon from './WeatherIcon'
 import './animated-icons.css'
@@ -46,15 +46,15 @@ export default class YahooWeather extends Component {
   }
 
   fetchData() {
-    const location = this.state.settings.location
-    const searchString = `${location.city}, ${location.countryCode}`
+    // const location = this.state.settings.location
+    // const searchString = `${location.city}, ${location.countryCode}`
 
     this.setState({ loading: true })
     // yw.getFullWeather(encodeURIComponent(searchString), this.state.settings.unit)
     yw.getMockWeather()
       .then((res) => {
         const ch = res.query.results.channel;
-        console.log('got channel: ', ch);
+        // console.log('got channel: ', ch);
         this.setState({
           loading: false,
           initialLoadDone: true,
@@ -79,11 +79,11 @@ export default class YahooWeather extends Component {
   render() {
     const hasError = !this.state.data
     const data = this.state.data
-    const settings = this.state.settings
-    const unit = '°' + settings.unit.toUpperCase()
+    // const settings = this.state.settings
+    // const unit = '°' + settings.unit.toUpperCase()
 
     return(
-      <div className="YahooWeather">
+      <div className="widget YahooWeather">
         { hasError &&
           <div className="error">{ this.state.error }</div>
         }

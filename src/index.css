@@ -6,3 +6,15 @@ body {
   color: #161616;
   background-color: currentColor;
 }
+
+.widget {
+  padding-bottom: 30px;
+}
+
+.textAlert {
+  color: #ffb9b9;
+}
+
+.textSuccess {
+  color: #b9ffc3;
+}

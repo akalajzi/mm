@@ -3,14 +3,33 @@ import moment from 'moment'
 import './Time.css'
 
 export default class Time extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      now: moment(),
+    }
+  }
+
+  updateTime() {
+    this.setState( {
+      now: moment(),
+    })
+  }
+
   render() {
+
+    setInterval(() => {
+      this.updateTime()
+    }, 30000)
+
     return(
-      <div className="Time">
+      <div className="widget Time">
         <div className="time-clock">
-          { moment().format('HH:mm') }
+          { this.state.now.format('HH:mm') }
         </div>
         <div className="time-date">
-          { moment().format('dddd, D MMMM') }
+          { this.state.now.format('dddd, MMMM D') }
         </div>
       </div>
     )

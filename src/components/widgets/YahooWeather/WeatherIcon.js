@@ -61,6 +61,8 @@ export default function WeatherIcon({type}) {
         </div>
       )
       break
+    default:
+      icon = <div />
   }
   return icon
 }

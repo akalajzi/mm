@@ -9,7 +9,6 @@ import {
   TopLeft,
   TopRight,
 } from 'components/zones'
-// import {BottomCenter} from 'components/zones/BottomCenter'
 
 import './App.css'
 
@@ -33,12 +32,6 @@ class App extends Component {
         </div>
       </div>
     );
-
-    // return(
-    //   <div className="App">
-    //     <BottomCenter />
-    //   </div>
-    // )
   }
 }
 

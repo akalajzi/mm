@@ -11,6 +11,17 @@ export default class Time extends Component {
     }
   }
 
+  componentDidMount() {
+    this.timer = setInterval(
+      () => this.updateTime(),
+      10000
+    )
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer)
+  }
+
   updateTime() {
     this.setState( {
       now: moment(),
@@ -18,10 +29,6 @@ export default class Time extends Component {
   }
 
   render() {
-
-    setInterval(() => {
-      this.updateTime()
-    }, 30000)
 
     return(
       <div className="widget Time">

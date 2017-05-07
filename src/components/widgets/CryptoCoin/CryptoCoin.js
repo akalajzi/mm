@@ -90,11 +90,37 @@ export default class CryptoCoin extends Component {
   renderCoins(data) {
     console.log(data);
     let table = []
+    let total = 0
+
     data.forEach((item, index) => {
       table.push(this.renderCoinData(item, index))
       table.push(this.renderCoinAssets(item, index))
+      if (this.state.coinsOwned[item.id]) {
+        total += this.state.coinsOwned[item.id] * item.price_usd
+      }
     })
-    return <table><tbody>{table}</tbody></table>
+
+    return (
+      <table cellSpacing="0" >
+        <thead>
+          <tr className="coin-data-header">
+            <th />
+            <th colSpan="2">CRYPTOCURRENCIES</th>
+            <th className="text-center">1h</th>
+            <th className="text-center">24h</th>
+          </tr>
+        </thead>
+        <tbody>
+          {table}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td className="text-right" style={{ paddingRight: "20px" }} colSpan="3">Total value</td>
+            <td colSpan="2">{total.toFixed(2)} USD</td>
+          </tr>
+        </tfoot>
+      </table>
+    )
   }
 
   render() {

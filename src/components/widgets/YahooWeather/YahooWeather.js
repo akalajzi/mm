@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import moment from 'moment'
+import './animated-icons.css'
 import './YahooWeather.css'
+
+// icon css c/p from https://codepen.io/joshbader/pen/EjXgqr
+// TODO: check licence
 
 const yw = require('./service.js')
 
@@ -11,10 +15,6 @@ const defaultLocation = {
   longitude: null,
 }
 const defaultUnit = 'c'
-
-const defaultData = {
-
-}
 
 export default class YahooWeather extends Component {
   constructor(props) {
@@ -48,7 +48,8 @@ export default class YahooWeather extends Component {
     const searchString = `${location.city}, ${location.countryCode}`
 
     this.setState({ loading: true })
-    yw.getFullWeather(encodeURIComponent(searchString), this.state.settings.unit)
+    // yw.getFullWeather(encodeURIComponent(searchString), this.state.settings.unit)
+    yw.getMockWeather()
       .then((res) => {
         const ch = res.query.results.channel;
         console.log('got channel: ', ch);
@@ -87,6 +88,15 @@ export default class YahooWeather extends Component {
         { !hasError &&
           <div className="yw-data">
             <div className="yw-condition">
+              <div className="yw-icon">
+                <div className="icon sun-shower">
+                  <div className="cloud"></div>
+                  <div className="sun">
+                    <div className="rays"></div>
+                  </div>
+                  <div className="rain"></div>
+                </div>
+              </div>
               { data.item.condition.text + ' ' + data.item.condition.temp } { unit }
             </div>
             <div className="yw-time">

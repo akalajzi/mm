@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import moment from 'moment'
+
+import WeatherIcon from './WeatherIcon'
 import './animated-icons.css'
 import './YahooWeather.css'
 
@@ -89,13 +91,7 @@ export default class YahooWeather extends Component {
           <div className="yw-data">
             <div className="yw-condition">
               <div className="yw-icon">
-                <div className="icon sun-shower">
-                  <div className="cloud"></div>
-                  <div className="sun">
-                    <div className="rays"></div>
-                  </div>
-                  <div className="rain"></div>
-                </div>
+                <WeatherIcon type={'rainy'} />
               </div>
               { data.item.condition.text + ' ' + data.item.condition.temp } { unit }
             </div>

@@ -70,7 +70,7 @@ export default class YahooWeather extends Component {
 
   getTimeToSunToggle() {
     // todo
-    return moment().format('HH:mm')
+    //return moment().format('HH:mm')
   }
 
   render() {

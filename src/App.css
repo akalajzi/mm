@@ -4,6 +4,7 @@
   flex-direction: row;
   text-align: center;
   height: 100vh;
+  padding: 10px;
 }
 
 .App-logo {
@@ -17,7 +18,7 @@
 }
 
 .zone {
-  border: 1px solid #444;
+  /*border: 1px solid #444;*/
   min-width: 300px;
 }
 

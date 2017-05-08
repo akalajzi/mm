@@ -8,7 +8,7 @@ body {
 }
 
 .widget {
-  padding-bottom: 30px;
+  padding-bottom: 40px;
 }
 
 .textAlert {
@@ -19,4 +19,15 @@ body {
 }
 .textDimmed {
   color: #b9b9b9;
+}
+
+/* remove stuff from gmap */
+a[href^="http://maps.google.com/maps"]{display:none !important}
+a[href^="https://maps.google.com/maps"]{display:none !important}
+
+.gmnoprint a, .gmnoprint span, .gm-style-cc {
+    display:none;
+}
+.gmnoprint div {
+    background:none !important;
 }

@@ -7,13 +7,15 @@ import classNames from 'classnames'
 import './CommuteTime.css'
 import CommuteMap from './CommuteMap'
 
-const google = window.google
-
 const DIRECTIONS_API_URL = 'https://maps.googleapis.com/maps/api/directions/json?'
-const DISTANCE_API_URL = 'https://maps.googleapis.com/maps/api/distancematrix/json?'
+// const DISTANCE_API_URL = 'https://maps.googleapis.com/maps/api/distancematrix/json?'
 const API_KEY = 'AIzaSyCnS0fQyRDw509wn3c_tqBM3TZRibFitTI'
 const origin = 'Apartmani+Dide+Stipe,+Velika+luka+1,+Stanići,+21310,+Omiš,+Croatia'
 const destination = 'Stinice+ul.+12,+21000,+Split,+Croatia'
+const workFrom = {
+  hours: 10,
+  minutes: 30,
+}
 
 export default class CommuteTime extends Component {
   static propTypes = {
@@ -36,7 +38,7 @@ export default class CommuteTime extends Component {
   componentDidMount() {
     this.getDrivingResult()
     this.todayDate = moment().format('YYYY-MM-DD')
-    this.workStart = moment(this.todayDate).add(10, 'h')
+    this.workStart = moment(this.todayDate).add(workFrom)
   }
 
   getDrivingResult() {
@@ -51,7 +53,6 @@ export default class CommuteTime extends Component {
         if (err) {
           this.setState({ error: err, loading: false, loaded: true, data: [] })
         } else {
-          console.log(res.body);
           this.setState({ error: null, loading: false, loaded: true, data: res.body })
         }
       })
@@ -74,7 +75,6 @@ export default class CommuteTime extends Component {
 
   renderTimeToWork() {
     const routes = this.state.data.routes
-    console.log('routes -> ', routes);
     const now = moment()
     const fastestRoute = this.getFastestRoute(routes)
     const latestLeave = moment(this.workStart).subtract(fastestRoute.legs[0].duration.value*1000)
@@ -89,7 +89,7 @@ export default class CommuteTime extends Component {
 
     return(
       <div className="ct-ttwork">
-        <div className='textDimmed'>Work starts at {this.workStart.format('HH:mm')}</div>
+        <div className='textDimmed ct-title'>Work starts at {this.workStart.format('HH:mm')}</div>
         <div className={classNames({
           'ct-message': true,
           'textAlert': alreadyLate,
@@ -100,37 +100,39 @@ export default class CommuteTime extends Component {
           <div>
             { fastest.name } ({ fastest.distance}) - { fastest.duration }
           </div>
+          <div className="ct-alternativeRoutes">
+            { routes.map((route, index) => {
+              if (route.overview_polyline.points !== fastestRoute.overview_polyline.points) {
+                const name = route.summary === 'D8' ? 'Magistrala' : 'Priko Tugara'
+                const distance = route.legs[0].distance.text
+                const duration = route.legs[0].duration
+
+                return (
+                  <div key={index}>
+                    <div className='ct-title textDimmed'>Alternative Routes</div>
+                    <div>
+                      {name} ({distance}) - {duration.text}
+                    </div>
+                    <div className="textAlert">
+                      {route.warnings.map((warning, i) => {return <span key={i}>warning</span>})}
+                    </div>
+                  </div>
+                )
+              } else {
+                return <div/>
+              }
+            })}
+          </div>
           <div className="ct-map">
             <CommuteMap
-              origin={origin}
-              destination={destination}
+              origin={fastestRoute.legs[0].start_location}
+              destination={fastestRoute.legs[0].end_location}
+              mapCenter={fastestRoute.legs[0].end_location}
             />
           </div>
         </div>
 
-        <div className="ct-alternativeRoutes">
-          { routes.map((route, index) => {
-            if (route.overview_polyline.points !== fastestRoute.overview_polyline.points) {
-              // console.log('route sum', route.summary);
-              // console.log('fastest sum', fastest.summary);
-              const name = route.summary === 'D8' ? 'Magistrala' : 'Priko Tugara'
-              const distance = route.legs[0].distance.text
-              const duration = route.legs[0].duration
 
-              return (
-                <div key={index}>
-                  <div className='ct-title textDimmed'>Alternative Routes</div>
-                  <div>
-                    {name} ({distance}) - {duration.text}
-                  </div>
-                  <div className="textAlert">
-                    {route.warnings.map((warning, i) => {return <span key={i}>warning</span>})}
-                  </div>
-                </div>
-              )
-            }
-          })}
-        </div>
       </div>
     )
   }

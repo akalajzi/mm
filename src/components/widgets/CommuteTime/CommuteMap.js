@@ -3,10 +3,9 @@ import React, { Component } from "react";
 import {
   withGoogleMap,
   GoogleMap,
-  DirectionsRenderer,
+  // DirectionsRenderer,
   TrafficLayer,
 } from 'react-google-maps'
-// } from "../../../lib";
 
 const google = window.google
 
@@ -23,7 +22,7 @@ const darkStyle = [
     "elementType": "geometry.fill",
     "stylers": [
       {
-        "color": "#000000"
+        "color": "#161616"
       },
       {
         "visibility": "on"
@@ -252,7 +251,7 @@ const darkStyle = [
     "elementType": "geometry",
     "stylers": [
       {
-        "color": "#222222"
+        "color": "#161616"
       },
       {
         "visibility": "on"
@@ -273,8 +272,8 @@ const darkStyle = [
 
 const DirectionsGoogleMap = withGoogleMap(props => (
   <GoogleMap
-    defaultZoom={7}
-    // defaultCenter={props.center}
+    defaultZoom={11}
+    defaultCenter={props.center}
     defaultOptions={{
 			styles: darkStyle,
 			mapTypeControl: false,
@@ -285,8 +284,8 @@ const DirectionsGoogleMap = withGoogleMap(props => (
 			fullscreenControl: false,
 		}}
   >
-    [{props.directions && <DirectionsRenderer directions={props.directions} />}, <TrafficLayer autoUpdate />]
-    {/* { props.directions && <TrafficLayer autoUpdate />} */}
+    {/* [{props.directions && <DirectionsRenderer directions={props.directions} />}, <TrafficLayer autoUpdate />] */}
+    <TrafficLayer autoUpdate />
   </GoogleMap>
 ));
 
@@ -320,6 +319,10 @@ export default class CommuteMap extends Component {
   }
 
   render() {
+    const center = {
+      lat: (this.props.origin.lat + this.props.destination.lat) / 2,
+      lng: (this.props.origin.lng + this.props.destination.lng) / 2,
+    }
     return (
       <DirectionsGoogleMap
         containerElement={
@@ -328,7 +331,7 @@ export default class CommuteMap extends Component {
         mapElement={
           <div style={{ height: `100%` }} />
         }
-        center={this.state.origin}
+        center={center}
         directions={this.state.directions}
       />
     );

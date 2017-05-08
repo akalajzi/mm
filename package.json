@@ -8,6 +8,7 @@
     "moment": "^2.18.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-google-maps": "^6.3.0",
     "superagent": "^3.5.2"
   },
   "devDependencies": {

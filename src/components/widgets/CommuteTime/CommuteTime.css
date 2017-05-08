@@ -1,0 +1,9 @@
+.ct-fastestRoute,
+.ct-alternativeRoutes {
+  margin-top: 8px;
+}
+
+.ct-map > div {
+	width: 100%;
+	height: 250px !important;
+}

@@ -14,7 +14,9 @@ body {
 .textAlert {
   color: #ffb9b9;
 }
-
 .textSuccess {
   color: #b9ffc3;
+}
+.textDimmed {
+  color: #b9b9b9;
 }

@@ -22,6 +22,8 @@ class App extends Component {
         return <Time key={'w'+key} />
       case 'YahooWeather':
         return <YahooWeather key={'w'+key} />
+      default:
+        return <div />
     }
   }
 

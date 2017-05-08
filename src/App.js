@@ -1,34 +1,65 @@
 import React, { Component } from 'react'
 
-import {
-  BottomCenter,
-  BottomLeft,
-  BottomRight,
-  Center,
-  TopCenter,
-  TopLeft,
-  TopRight,
-} from 'components/zones'
+import Zone from 'components/ui/Zone'
+import widgets from 'config/widgets'
+
+import CommuteTime from 'components/widgets/CommuteTime'
+import CryptoCoin from 'components/widgets/CryptoCoin'
+import Time from 'components/widgets/Time'
+import YahooWeather from 'components/widgets/YahooWeather'
 
 import './App.css'
 
 class App extends Component {
 
+  resolveComponent(widget, key) {
+    switch (widget.name) {
+      case 'CommuteTime':
+        return <CommuteTime key={'w'+key} />
+      case 'CryptoCoin':
+        return <CryptoCoin key={'w'+key} />
+      case 'Time':
+        return <Time key={'w'+key} />
+      case 'YahooWeather':
+        return <YahooWeather key={'w'+key} />
+    }
+  }
+
+  renderWidgets(widgets) {
+    return widgets.map((widget, key) => {
+      return this.resolveComponent(widget, key)
+    })
+  }
+
   render() {
     return (
-      <div className="App">
-        <div className="zoneGroup-side">
-          <TopLeft />
-          <BottomLeft />
+      <div className='App'>
+        <div className='zoneGroup-side'>
+          <Zone className='topLeft'>
+            { this.renderWidgets(widgets.left.top) }
+          </Zone>
+          <Zone className='bottomLeft'>
+            { this.renderWidgets(widgets.left.bottom) }
+          </Zone>
         </div>
-        <div className="zoneGroup-center">
-          <TopCenter />
-          <Center />
-          <BottomCenter />
+        <div className='zoneGroup-center'>
+          <Zone className='topCenter'>
+            { this.renderWidgets(widgets.center.top) }
+          </Zone>
+          <Zone className='center'>
+            { this.renderWidgets(widgets.center.center) }
+          </Zone>
+          <Zone className='bottomCenter'>
+            { this.renderWidgets(widgets.center.bottom) }
+          </Zone>
         </div>
-        <div className="zoneGroup-side">
-          <TopRight />
-          <BottomRight />
+        <div className='zoneGroup-side'>
+          <Zone className='topRight'>
+            { this.renderWidgets(widgets.right.top) }
+          </Zone>
+          <Zone className='bottomRight'>
+            { this.renderWidgets(widgets.right.bottom) }
+          </Zone>
         </div>
       </div>
     );

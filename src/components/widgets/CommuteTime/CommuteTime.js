@@ -14,7 +14,7 @@ const origin = 'Apartmani+Dide+Stipe,+Velika+luka+1,+Stanići,+21310,+Omiš,+Cro
 const destination = 'Stinice+ul.+12,+21000,+Split,+Croatia'
 const workFrom = {
   hours: 10,
-  minutes: 30,
+  minutes: 0,
 }
 
 export default class CommuteTime extends Component {
@@ -28,17 +28,18 @@ export default class CommuteTime extends Component {
   constructor(props) {
     super(props)
 
+    this.today = moment().format('YYYY-MM-DD')
+
     this.state= {
       loading: false,
       error: null,
       data: [],
+      workStart: moment(this.today).add(workFrom),
     }
   }
 
   componentDidMount() {
     this.getDrivingResult()
-    this.todayDate = moment().format('YYYY-MM-DD')
-    this.workStart = moment(this.todayDate).add(workFrom)
   }
 
   getDrivingResult() {
@@ -73,11 +74,32 @@ export default class CommuteTime extends Component {
     return fastestRoute
   }
 
+  isTimeCloseToWorkTime() {
+    let out = false
+    const now = moment()
+    const workStart = this.state.workStart
+    if (moment(workStart).subtract(4, 'h').isAfter(now) || moment(workStart).add(1, 'h').isBefore(now) ) {
+      out = true
+    }
+    return out
+  }
+
+  shouldShowWidget() {
+    let show = true
+    const alwaysShow = this.props.config.alwaysShow
+    // dont even ping google until 4 hours before, and 1 hour after workStart
+    if (this.isTimeCloseToWorkTime() && !alwaysShow ) {
+      show = false
+    }
+    return show
+  }
+
   renderTimeToWork() {
     const routes = this.state.data.routes
     const now = moment()
+    const workStart = this.state.workStart
     const fastestRoute = this.getFastestRoute(routes)
-    const latestLeave = moment(this.workStart).subtract(fastestRoute.legs[0].duration.value*1000)
+    const latestLeave = moment(workStart).subtract(fastestRoute.legs[0].duration.value*1000)
     const alreadyLate = moment(latestLeave).isAfter(now)
 
     const fastest = {
@@ -89,11 +111,14 @@ export default class CommuteTime extends Component {
 
     return(
       <div className="ct-ttwork">
-        <div className='textDimmed ct-title'>Work starts at {this.workStart.format('HH:mm')}</div>
-        <div className={classNames({
-          'ct-message': true,
-          'textAlert': alreadyLate,
-        })}>{ fastest.message }</div>
+        <div className='textDimmed ct-title'>Work starts at {this.state.workStart.format('HH:mm')}</div>
+        {
+          this.isTimeCloseToWorkTime() &&
+          <div className={classNames({
+            'ct-message': true,
+            'textAlert': alreadyLate,
+          })}>{ fastest.message }</div>
+        }
 
         <div className="ct-fastestRoute">
           <div className="ct-title textDimmed">Fastest Route</div>
@@ -119,7 +144,7 @@ export default class CommuteTime extends Component {
                   </div>
                 )
               } else {
-                return <div/>
+                return <div key={index} />
               }
             })}
           </div>
@@ -131,18 +156,15 @@ export default class CommuteTime extends Component {
             />
           </div>
         </div>
-
-
       </div>
     )
   }
 
   render() {
-
+    const shouldShowWidget = this.shouldShowWidget()
     // skip render if we dont need it
-    if (!this.props.config.alwaysShow) {
+    if (!shouldShowWidget) {
       return <div />
-
     } else {
       return(
         <div className="widget CommuteTime">

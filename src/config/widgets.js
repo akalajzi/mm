@@ -26,9 +26,9 @@ export default {
       },
       {
         name: 'CommuteTime',
-        mock: false,
+        mock: true,
         config: {
-          alwaysShow: true,
+          alwaysShow: false,
         },
       }
     ],

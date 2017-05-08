@@ -8,7 +8,7 @@ export default class TopLeft extends Component {
     return (
       <div className="zone topLeft">
         <Time />
-        <CryptoCoin />
+        {/* <CryptoCoin /> */}
       </div>
     )
   }

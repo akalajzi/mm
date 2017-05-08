@@ -88,7 +88,6 @@ export default class CryptoCoin extends Component {
   }
 
   renderCoins(data) {
-    console.log(data);
     let table = []
     let total = 0
 

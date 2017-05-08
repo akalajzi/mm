@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 // import moment from 'moment'
 
 import WeatherIcon from './WeatherIcon'
@@ -16,9 +17,15 @@ const defaultLocation = {
   latitute: null,
   longitude: null,
 }
-const defaultUnit = 'c'
 
 export default class YahooWeather extends Component {
+  static propTypes = {
+    mock: PropTypes.bool,
+    config: PropTypes.shape({
+      temperatureUnit: PropTypes.string,
+    }),
+  }
+
   constructor(props) {
     super(props)
 
@@ -29,7 +36,7 @@ export default class YahooWeather extends Component {
       error: null,
       settings: {
         location: defaultLocation,
-        unit: defaultUnit,
+        unit: this.props.config.temperatureUnit,
       }
     }
   }
@@ -46,29 +53,29 @@ export default class YahooWeather extends Component {
   }
 
   fetchData() {
-    // const location = this.state.settings.location
-    // const searchString = `${location.city}, ${location.countryCode}`
+    const location = this.state.settings.location
+    const searchString = `${location.city}, ${location.countryCode}`
 
     this.setState({ loading: true })
-    // yw.getFullWeather(encodeURIComponent(searchString), this.state.settings.unit)
-    yw.getMockWeather()
-      .then((res) => {
-        const ch = res.query.results.channel;
-        // console.log('got channel: ', ch);
-        this.setState({
-          loading: false,
-          initialLoadDone: true,
-          error: null,
-          data: ch,
+    if (this.props.mock) {
+      yw.getMockWeather()
+        .then((res) => {
+          const ch = res.query.results.channel;
+          this.setState({ loading: false, initialLoadDone: true, error: null, data: ch })
         })
-      })
-      .catch((res) => {
-        this.setState({
-          loading: false,
-          initialLoadDone: false,
-          error: 'Cannot fetch weather info.',
+        .catch((res) => {
+          this.setState({ loading: false, initialLoadDone: false, error: 'Cannot fetch weather info.'})
         })
-      })
+    } else {
+      yw.getFullWeather(encodeURIComponent(searchString), this.state.settings.unit)
+        .then((res) => {
+          const ch = res.query.results.channel;
+          this.setState({ loading: false, initialLoadDone: true, error: null, data: ch })
+        })
+        .catch((res) => {
+          this.setState({ loading: false, initialLoadDone: false, error: 'Cannot fetch weather info.'})
+        })
+    }
   }
 
   getTimeToSunToggle() {

@@ -25,7 +25,7 @@ tfoot > tr > td {
 }
 
 .coin-asset {
-  /*height: 24px;*/
+  height: 8px;
 }
 .coin-asset td {
   padding-bottom: 8px;

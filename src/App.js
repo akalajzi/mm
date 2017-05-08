@@ -21,7 +21,7 @@ class App extends Component {
       case 'Time':
         return <Time key={'w'+key} />
       case 'YahooWeather':
-        return <YahooWeather key={'w'+key} />
+        return <YahooWeather key={'w'+key} mock={widget.mock} config={widget.config} />
       default:
         return <div />
     }

@@ -9,7 +9,7 @@ export default {
           refreshInterval: 5,
           coinsOwned: {
             bitcoin: 2.000000000,
-            ripple: 3917.4,
+            ripple: 0,
             ethereum: 4.6721528,
           }
         },
@@ -22,7 +22,9 @@ export default {
       {
         name: 'YahooWeather',
         mock: true,
-        config: {},
+        config: {
+          temperatureUnit: 'c',
+        },
       },
       {
         name: 'CommuteTime',

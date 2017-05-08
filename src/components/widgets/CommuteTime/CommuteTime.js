@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import request from 'superagent'
 import moment from 'moment'
 
@@ -9,6 +10,11 @@ const origin = 'Apartmani+Dide+Stipe,+Velika+luka+1,+Stanići,+21310,+Omiš,+Cro
 const destination = 'Stinice+ul.+12,+21000,+Split,+Croatia'
 
 export default class CommuteTime extends Component {
+  static propTypes = {
+    mock: PropTypes.bool,
+    config: PropTypes.object,
+  }
+
   constructor(props) {
     super(props)
 
@@ -27,8 +33,12 @@ export default class CommuteTime extends Component {
 
   getDrivingResult() {
     this.setState({ loading: true, loaded: false })
-    request
-      .get(DIRECTIONS_API_URL + 'origin=' + origin + '&destination=' + destination + '&alternatives=true&key='+API_KEY)
+    if (this.props.mock) {
+      const mockData = require('./mockResponse.js').default
+      this.setState({ error: null, loading: false, loaded: true, data: mockData })
+    } else {
+      request
+      .get(DIRECTIONS_API_URL + 'origin=' + origin + '&destination=' + destination + '&alternatives=true&key=' + API_KEY)
       .end((err, res) => {
         if (err) {
           this.setState({ error: err, loading: false, loaded: true, data: [] })
@@ -37,6 +47,7 @@ export default class CommuteTime extends Component {
           this.setState({ error: null, loading: false, loaded: true, data: res.body })
         }
       })
+    }
   }
 
   getTransitResult() {

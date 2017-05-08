@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import request from 'superagent'
 import classNames from 'classnames'
 
@@ -6,15 +7,28 @@ import classNames from 'classnames'
 import './assets/cryptocoins.css'
 import './CryptoCoin.css'
 
-
-const coinsOwned = {
-  bitcoin: 2.000000000,
-  ripple: 3917.4,
-  ethereum: 4.6721528,
+const defaultProps = {
+  mock: false,
+  config: {
+    refreshInterval: 5,
+    coinsOwned: {
+      bitcoin: 0,
+      ripple: 0,
+      ethereum: 0,
+    }
+  }
 }
 
 // TODO: CORS
-export default class CryptoCoin extends Component {
+class CryptoCoin extends Component {
+  static propTypes = {
+    mock: PropTypes.bool,
+    config: PropTypes.shape({
+      refreshInterval: PropTypes.integer, // minutes
+      coinsOwned: PropTypes.object,
+    }),
+  }
+
   constructor(props) {
     super(props)
 
@@ -22,25 +36,37 @@ export default class CryptoCoin extends Component {
       loading: false,
       error: null,
       data: [],
-      coinsOwned: coinsOwned,
     }
   }
 
   componentDidMount() {
     this.fetchCoinMarketCap()
+    this.timer = setInterval(
+      () => this.fetchCoinMarketCap(),
+      60000 * this.props.config.refreshInterval
+    )
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer)
   }
 
   fetchCoinMarketCap() {
     this.setState({ loading: true, loaded: false })
-    request
-      .get('https://api.coinmarketcap.com/v1/ticker/?limit=3')
-      .end((err, res) => {
-        if (err) {
-          this.setState({ error: err, loading: false, loaded: true, data: [] })
-        } else {
-          this.setState({ error: null, loading: false, loaded: true, data: res.body })
-        }
-      })
+    if (this.props.mock) {
+      const mockData = require('./mockResponse.js').default
+      this.setState({ error: null, loading: false, loaded: true, data: mockData })
+    } else {
+      request
+        .get('https://api.coinmarketcap.com/v1/ticker/?limit=3')
+        .end((err, res) => {
+          if (err) {
+            this.setState({ error: err, loading: false, loaded: true, data: [] })
+          } else {
+            this.setState({ error: null, loading: false, loaded: true, data: res.body })
+          }
+        })
+    }
   }
 
   renderCoinData(item, index) {
@@ -68,7 +94,8 @@ export default class CryptoCoin extends Component {
   }
 
   renderCoinAssets(item, index) {
-    const amountOwned = this.state.coinsOwned[item.id] ? this.state.coinsOwned[item.id] : 0
+    const coinsOwned = this.props.config.coinsOwned
+    const amountOwned = coinsOwned[item.id] ? coinsOwned[item.id] : 0
 
     if (amountOwned > 0) {
       const amountValue = amountOwned * item.price_usd
@@ -94,8 +121,8 @@ export default class CryptoCoin extends Component {
     data.forEach((item, index) => {
       table.push(this.renderCoinData(item, index))
       table.push(this.renderCoinAssets(item, index))
-      if (this.state.coinsOwned[item.id]) {
-        total += this.state.coinsOwned[item.id] * item.price_usd
+      if (this.props.config.coinsOwned[item.id]) {
+        total += this.props.config.coinsOwned[item.id] * item.price_usd
       }
     })
 
@@ -123,10 +150,6 @@ export default class CryptoCoin extends Component {
   }
 
   render() {
-    setInterval(() => {
-      this.fetchCoinMarketCap()
-    }, 60000*5) // update every 5 minutes
-
     return(
       <div className="widget CryptoCoin">
         { this.state.loaded && this.state.error
@@ -139,3 +162,7 @@ export default class CryptoCoin extends Component {
     )
   }
 }
+
+CryptoCoin.defaultProps = defaultProps
+
+export default CryptoCoin

@@ -1,0 +1,50 @@
+export default [
+    {
+        "id": "bitcoin",
+        "name": "Bitcoin",
+        "symbol": "BTC",
+        "rank": "1",
+        "price_usd": "1664.63",
+        "price_btc": "1.0",
+        "24h_volume_usd": "1386910000.0",
+        "market_cap_usd": "27162683257.0",
+        "available_supply": "16317550.0",
+        "total_supply": "16317550.0",
+        "percent_change_1h": "-0.11",
+        "percent_change_24h": "5.86",
+        "percent_change_7d": "21.77",
+        "last_updated": "1494234549"
+    },
+    {
+        "id": "ethereum",
+        "name": "Ethereum",
+        "symbol": "ETH",
+        "rank": "2",
+        "price_usd": "93.2639",
+        "price_btc": "0.0559827",
+        "24h_volume_usd": "252307000.0",
+        "market_cap_usd": "8525909942.0",
+        "available_supply": "91417043.0",
+        "total_supply": "91417043.0",
+        "percent_change_1h": "0.41",
+        "percent_change_24h": "-2.54",
+        "percent_change_7d": "15.41",
+        "last_updated": "1494234565"
+    },
+    {
+        "id": "ripple",
+        "name": "Ripple",
+        "symbol": "XRP",
+        "rank": "3",
+        "price_usd": "0.188529",
+        "price_btc": "0.00011317",
+        "24h_volume_usd": "343736000.0",
+        "market_cap_usd": "7155727396.0",
+        "available_supply": "37955579225.0",
+        "total_supply": "99994896990.0",
+        "percent_change_1h": "2.4",
+        "percent_change_24h": "60.85",
+        "percent_change_7d": "234.18",
+        "last_updated": "1494234542"
+    }
+  ]

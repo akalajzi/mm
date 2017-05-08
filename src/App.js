@@ -15,9 +15,9 @@ class App extends Component {
   resolveComponent(widget, key) {
     switch (widget.name) {
       case 'CommuteTime':
-        return <CommuteTime key={'w'+key} />
+        return <CommuteTime key={'w'+key} mock={widget.mock} config={widget.config} />
       case 'CryptoCoin':
-        return <CryptoCoin key={'w'+key} />
+        return <CryptoCoin key={'w'+key} mock={widget.mock} config={widget.config} />
       case 'Time':
         return <Time key={'w'+key} />
       case 'YahooWeather':

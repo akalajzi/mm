@@ -14,6 +14,11 @@ export default {
           }
         },
       },
+      {
+        name: 'Notes',
+        mock: false,
+        config: {},
+      },
     ],
     bottom: [],
   },

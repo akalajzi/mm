@@ -12,7 +12,7 @@ import CommuteTime from 'components/widgets/CommuteTime'
 import CryptoCoin from 'components/widgets/CryptoCoin'
 import Time from 'components/widgets/Time'
 import YahooWeather from 'components/widgets/YahooWeather'
-import Notes from 'components/widgets/Notes'
+import { Notes, Today } from 'components/widgets/Notes'
 
 import './App.css'
 
@@ -45,7 +45,7 @@ class App extends Component {
       case 'Time':
         return <Time key={'w'+key} />
       case 'Today':
-        return <Notes key={'w'+key} mock={widget.mock} config={widget.config} today />
+        return <Today key={'w'+key} mock={widget.mock} config={widget.config} />
       case 'YahooWeather':
         return <YahooWeather key={'w'+key} mock={widget.mock} config={widget.config} />
       default:

@@ -1,3 +1,7 @@
 import Notes from './Notes.js'
+import Today from './Today.js'
 
-export default Notes
+export {
+  Notes,
+  Today,
+}

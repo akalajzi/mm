@@ -36,7 +36,9 @@ const propTypes = {
   }),
 }
 
-class Notes extends Component {
+// TODO: dont fetch allNotes, filter today in query
+
+class Today extends Component {
   constructor(props) {
     super(props)
 
@@ -52,7 +54,7 @@ class Notes extends Component {
       const newDataSource = _.clone(newData.notes.slice().reverse())
 
       this.setState({
-        dataSource: this.cutToLimit(itemLimit, this.filterOutReminders(newDataSource))
+        dataSource: this.cutToLimit(itemLimit, this.getNotesForToday(newDataSource))
       })
     }
   }
@@ -67,10 +69,6 @@ class Notes extends Component {
     return result
   }
 
-  filterOutReminders(data) {
-    return _.filter(data, (item) => { return !item.reminder })
-  }
-
   getNotesForToday(data) {
     return _.filter(data, (item) => { moment().isSame(item.reminder, 'day') })
   }
@@ -78,15 +76,20 @@ class Notes extends Component {
   render() {
     return (
       <div className="widget Notes">
-        <div className="NotesTitle textDimmed">NOTES</div>
-        { this.state.dataSource.map((note) => { return <Note key={note.id} note={note} /> }) }
+        <div className="NotesTitle textDimmed">SCHEDULED FOR TODAY</div>
+        { this.state.dataSource.length === 0
+          ? (<div className="NotesTodayEmpty">
+              All clear. Enjoy! <i className="fa fa-thumbs-o-up" />
+            </div>)
+          : this.state.dataSource.map((note) => { return <Note key={note.id} note={note} /> })
+        }
       </div>
     )
   }
 }
 
-Notes.defaultProps = defaultProps
-Notes.propTypes = propTypes
+Today.defaultProps = defaultProps
+Today.propTypes = propTypes
 
 const userNotesQuery = graphql(NOTES_BY_USER_QUERY, {
   options: ({ id }) => ({ variables: { userId: USER_ID } }),
@@ -97,4 +100,4 @@ const userNotesQuery = graphql(NOTES_BY_USER_QUERY, {
 
 export default compose(
   userNotesQuery,
-)(Notes)
+)(Today)

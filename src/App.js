@@ -44,6 +44,8 @@ class App extends Component {
         return <Notes key={'w'+key} mock={widget.mock} config={widget.config} />
       case 'Time':
         return <Time key={'w'+key} />
+      case 'Today':
+        return <Notes key={'w'+key} mock={widget.mock} config={widget.config} today />
       case 'YahooWeather':
         return <YahooWeather key={'w'+key} mock={widget.mock} config={widget.config} />
       default:

@@ -2,14 +2,16 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { graphql, compose } from 'react-apollo'
 import _ from 'lodash'
+import moment from 'moment'
 
-import Note from './Note'
+import Note from './components/Note'
 import { NOTES_BY_USER_QUERY } from './notes.graphql'
 import './Notes.css'
 
 const USER_ID = "cj1jl8xl8ikt50164272zrr7s"
 
 const defaultProps = {
+  today: false,
   notes: [],
   loading: false,
   mock: true,
@@ -33,6 +35,7 @@ const propTypes = {
   config: PropTypes.shape({
     itemLimit: PropTypes.number,
   }),
+  today: PropTypes.bool,
 }
 
 class Notes extends Component {
@@ -45,11 +48,18 @@ class Notes extends Component {
   componentWillReceiveProps(nextProps) {
     const oldData = this.props
     const newData = nextProps
+    const itemLimit = this.props.config.itemLimit
 
     if (!!newData.notes && (newData.notes !== oldData.notes)) {
       const newDataSource = _.clone(newData.notes.slice().reverse())
+      const filteredDataSource = this.props.today
+        // today widget
+        ? this.cutToLimit(itemLimit, this.getNotesForToday(newDataSource))
+        // all notes widget
+        : this.cutToLimit(this.props.config.itemLimit, newDataSource)
+
       this.setState({
-        dataSource: this.cutToLimit(this.props.config.itemLimit, newDataSource)
+        dataSource: filteredDataSource
       })
     }
   }
@@ -64,12 +74,33 @@ class Notes extends Component {
     return result
   }
 
+  getNotesForToday(data) {
+    return _.filter(data, (item) => { moment().isSame(item.reminder, 'day') })
+  }
+
   render() {
-    return (
-      <div className="widget Notes">
-        { this.state.dataSource.map((note) => { return <Note key={note.id} note={note} /> }) }
-      </div>
-    )
+    if (this.props.today) {
+      // today widget
+      return (
+        <div className="widget Notes">
+          <div className="NotesTitle textDimmed">SCHEDULED FOR TODAY</div>
+          { this.state.dataSource.length === 0
+            ? (<div className="NotesTodayEmpty">
+                All clear. Enjoy! <i className="fa fa-thumbs-o-up" />
+              </div>)
+            : this.state.dataSource.map((note) => { return <Note key={note.id} note={note} /> })
+          }
+        </div>
+      )
+    } else {
+      // notes widget
+      return (
+        <div className="widget Notes">
+          <div className="NotesTitle textDimmed">NOTES & REMINDERS</div>
+          { this.state.dataSource.map((note) => { return <Note key={note.id} note={note} /> }) }
+        </div>
+      )
+    }
   }
 }
 

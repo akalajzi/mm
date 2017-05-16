@@ -39,6 +39,10 @@ export default {
         config: {
           alwaysShow: false,
         },
+      },
+      {
+        name: 'Today',
+        mock: false,
       }
     ],
     bottom: [],

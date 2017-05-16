@@ -1,0 +1,16 @@
+.NoteItem {
+	padding-bottom: 8px;
+}
+
+.NoteReminder {
+	width: 80px;
+	padding-right: 15px;
+	font-size: 14px;
+}
+
+.NoteTitle {
+	border-bottom: 1px solid #c3c3c3;
+}
+.NoteText {
+	font-size: 14px;
+}

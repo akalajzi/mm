@@ -17,7 +17,9 @@ export default {
       {
         name: 'Notes',
         mock: false,
-        config: {},
+        config: {
+          itemLimit: 10,
+        },
       },
     ],
     bottom: [],

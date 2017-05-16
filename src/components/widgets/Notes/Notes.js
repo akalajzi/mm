@@ -2,17 +2,20 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { graphql, compose } from 'react-apollo'
 import _ from 'lodash'
-import moment from 'moment'
 
+import Note from './Note'
 import { NOTES_BY_USER_QUERY } from './notes.graphql'
 import './Notes.css'
-
 
 const USER_ID = "cj1jl8xl8ikt50164272zrr7s"
 
 const defaultProps = {
   notes: [],
   loading: false,
+  mock: true,
+  config: {
+    itemLimit: 10,
+  }
 }
 
 const defaultState = {
@@ -26,6 +29,10 @@ const defaultState = {
 const propTypes = {
   loading: PropTypes.bool.isRequired,
   notes: PropTypes.array.isRequired,
+  mock: PropTypes.bool,
+  config: PropTypes.shape({
+    itemLimit: PropTypes.number,
+  }),
 }
 
 class Notes extends Component {
@@ -40,31 +47,27 @@ class Notes extends Component {
     const newData = nextProps
 
     if (!!newData.notes && (newData.notes !== oldData.notes)) {
+      const newDataSource = _.clone(newData.notes.slice().reverse())
       this.setState({
-        dataSource: _.clone(newData.notes.slice().reverse())
+        dataSource: this.cutToLimit(this.props.config.itemLimit, newDataSource)
       })
     }
   }
 
+  cutToLimit(limit, data) {
+    let result = []
+    for (let i = 0; i < limit; i++) {
+      if (data[i]) {
+        result.push(data[i])
+      }
+    }
+    return result
+  }
+
   render() {
-    // const { loading, notes } = this.props
-		console.log(this.state.dataSource);
     return (
       <div className="widget Notes">
-        Notes
-        { this.state.dataSource.map((note) => {
-          return (
-            <div key={note.id} className="NoteItem">
-              <div className="NoteTitle">
-								<span className="NoteReminder textDimmed">
-									{ moment(note.reminder).format('DD.MM.YYYY. HH:mm') }
-								</span>
-								{note.title}
-							</div>
-              <div className="NoteText textDimmed">{note.text}</div>
-            </div>
-          )
-        })}
+        { this.state.dataSource.map((note) => { return <Note key={note.id} note={note} /> }) }
       </div>
     )
   }
